@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+
     <meta charset="utf-8">
     <title>chatterbox</title>
     <link rel="stylesheet" href="styles/styles.css">
@@ -17,7 +18,28 @@
 
     <div id="main">
       <h1>Chat-Client</h1>
+      <ul id="chatbox">
+      </ul>
+      <form>
+        <input type="text" size="130" />
+        <button>Send message</button>
+      </form>
     </div>
 
+  <script>
+  $(document).ready(function() {
+    $("form").on('click', 'button', function(e) {
+      // e.preventDefault();
+      var username = window.location.search.split('=')[1];
+      console.log("clicked the button!");
+      var msg = this.$("input").val();
+      
+      // sendMessage(username, msg);
+    });
+
+  });
+
+
+  </script>
   </body>
 </html>

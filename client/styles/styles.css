@@ -5,24 +5,66 @@ body {
 }
 
 #main {
-    width: 500px;
-    margin: auto;
-    text-align: left;
-    background: white;
-    padding: 50px 60px;
-    border: solid #ddd;
-    border-width: 0 1px 1px 1px;
+  width: 800px;
+  margin: auto;
+  text-align: left;
+  background: white;
+  padding: 30px 20px;
+  border: 1px solid #ddd;
+  border-width: 0 1px 1px 1px;
 }
 
 #main h1 {
+    font-family: "Trebuchet MS";
     margin-top: 0;
     font-size: 35px;
 }
 
-#main ul {
-    padding-left: 20px;
+#main ul#chatbox {
+  padding: 0;
+}
+#main ul#chatbox li {
+  list-style-type:  none;
+  font-family: Verdana;
+  font-size: 12px;
+  /*background-color: lightblue;*/
+  margin: 7px 0;
+  /*border-bottom: 1px solid lightgrey;*/
 }
 
+#chatbox li span.username {
+  display: inline-block;
+  width: 130px;
+}
+#chatbox li span.date {
+  float:right;
+}
+#chatbox li span.room {
+  display: inline-block;;
+  width: 130px;
+}
+
+#chatbox li span.content {
+  
+
+}
+
+form {
+    border-top: 1px solid black;
+    padding-top: 20px;
+}
+form input[type="text"] {
+    line-height: 2em;
+    border: 1px solid lightgreen;
+}
+form button {
+    float: right;
+    padding: 6px 6px;
+    border-radius: 4px;
+    border: 1px solid black;
+    background: lightgreen;
+}
+/*
 #main .error {
     border: 1px solid red;
     background: #FDEFF0;
@@ -37,4 +79,5 @@ body {
     font-size: 12px;
     color: green;
     line-height: 13px;
-}
+}*/
+
