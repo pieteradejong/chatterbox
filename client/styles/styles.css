@@ -29,8 +29,13 @@ body {
   font-size: 12px;
   /*background-color: lightblue;*/
   margin: 7px 0;
+  padding: 4px;
   /*border-bottom: 1px solid lightgrey;*/
 }
+li.user{
+font-weight: bold;
+background: lightblue;
+  }
 
 #chatbox li span.username {
   display: inline-block;
@@ -45,7 +50,8 @@ body {
 }
 
 #chatbox li span.content {
-  
+  width: 400px;
+  overflow: auto;
 
 }
 

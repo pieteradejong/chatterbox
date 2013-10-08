@@ -1,39 +1,55 @@
 var latestMessageTimestamp = 0;
 var username = window.location.search.split('=')[1];
+var listOfRooms = [];
+var hasRun = false;
+var room = 'lobby';
 
-var displayMessages = function (data,hasRun) {
+var displayMessages = function (data) {
   _(data).each(function(message) {
-    var msgClean,thisDate,messageString, msgTimestamp;
+    var msgClean,thisDate,messageString,msgTimestamp;
     msgTimestamp = (new Date(message.createdAt)).getTime();
-    if (msgTimestamp > latestMessageTimestamp) {
     // newer messages get displayed:
-      thisDate = message.createdAt.toString().slice(11,16);
-      if (message.text !== undefined) {
-        msgClean = message.text.replace("<script>", "");
-        msgClean = msgClean.replace("</script>", "");
-        // msgClean.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g,'&gt;'').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-      }
+    thisDate = message.createdAt.toString().slice(11,16);
+    if (message.text !== undefined) {
+      msgClean = message.text.replace("<script>", "");
+      msgClean = msgClean.replace("</script>", "");
+      msgClean.replace(/\&/g, '&amp;').replace(/\>/g,'&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#039;');
+      // msgClean.replace(/\</g, '&lt;');
+    }
 
-      messageString = "<li class='message'>";
-      messageString += "<span class='username'>" + message.username + "</span>";
-      messageString += "<span class='room'> (in room " + message.roomname + ")</span>";
-      messageString += "<span class='content'> " +msgClean + "</span>";
-      messageString += "<span class='date'>" + thisDate + "</span>";
-      messageString += "</li>";
+    if (message.username === username) {
+      messageString = "<li class='message user'>";
+    } else {messageString = "<li class='message'>";}
 
-      if (hasRun === false) {
+    messageString += "<span class='username'>" + message.username + "</span>";
+    messageString += "<span class='room'> (in room " + message.roomname + ")</span>";
+    messageString += "<span class='content'> " +msgClean + "</span>";
+    messageString += "<span class='date'>" + thisDate + "</span>";
+    messageString += "</li>";
+
+    if (listOfRooms.indexOf(message.roomname) === -1) {
+      listOfRooms.push(message.roomname);
+    }
+
+    if (hasRun === false) {
+      if (msgTimestamp > latestMessageTimestamp) {
         $('#chatbox').append(messageString);
-      } else {
-        $("#chatbox").prepend(messageString);
       }
+    // } else if (room !== 'lobby') {
+    //     if (msgTimestamp > latestMessageTimestamp && message.roomname === room) {
+    //       $("#chatbox").prepend(messageString);
+    //     }
+    } else {
+        if (msgTimestamp > latestMessageTimestamp) {
+          $("#chatbox").prepend(messageString);
+        }
     }
   });
   hasRun = true;
-  latestMessageTimestamp = (new Date(data[0].createdAt)).getTime();
-  // console.log("latestMT="+latestMessageTimestamp);
+  latestMessageTimestamp = (new Date(data[0].updatedAt)).getTime();
 };
 
-var updateMessages = function(hasRun) {
+var updateMessages = function() {
   $.ajax({
     url: 'https://api.parse.com/1/classes/chatterbox',
     type: 'GET',
@@ -41,8 +57,7 @@ var updateMessages = function(hasRun) {
     data: {order: '-createdAt',
       limit: 25},
     success: function (data) {
-//      console.log(data.results.length);
-      displayMessages(data.results,hasRun);
+      displayMessages(data.results);
     },
     error: function (data) {
       console.error('chatterbox: Failed to send message');
@@ -52,32 +67,43 @@ var updateMessages = function(hasRun) {
 
 var sendMessage = function(username, msg) {
   console.log("sending message");
+  // room = room || 'default';
   var message = {
     username: username,
     text: msg,
-    roomname: 'thisroom'
+    roomname: room
   };
   $.ajax({
-  url: 'https://api.parse.com/1/classes/chatterbox',
-  type: 'POST',
-  data: JSON.stringify(msg),
-  contentType: 'application/json',
-  success: function (response) {
-    console.log('chatterbox: Message sent');
-  },
-  error: function (response) {
-    // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-    console.error('chatterbox: Failed to send message');
-  }
+    url: 'https://api.parse.com/1/classes/chatterbox',
+    type: 'POST',
+    data: JSON.stringify(message),
+    contentType: 'application/json',
+    success: function (response) {
+      console.log('chatterbox: Message sent');
+    },
+    error: function (response) {
+      // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
+      console.error('chatterbox: Failed to send message');
+    }
 });
 };
 
+var alreadyDisplayed = [];
+var updateRooms = function() {
+  _.each(listOfRooms, function(val, key, listOfRooms){
+    if (alreadyDisplayed.indexOf(val) === -1) {
+      $("#rooms").append("<li><a href='' onclick='return false'>" + val + "</a></li>");
+      alreadyDisplayed.push(val);
+    } else {
+    }
+  });
+};
 
 var run = function() {
-  var hasRun = false;
-  updateMessages(hasRun);
+  updateMessages(false);
   setInterval(function() {
-    updateMessages(hasRun);
+    updateMessages(true);
+    updateRooms();
   }, 1000);
 };
 

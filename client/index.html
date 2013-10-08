@@ -9,7 +9,6 @@
     <!-- external javascript -->
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
-    
     <!-- internal javascript -->
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
@@ -18,23 +17,30 @@
 
     <div id="main">
       <h1>Chat-Client</h1>
-      <ul id="chatbox">
-      </ul>
+      <ul id="rooms"></ul>
       <form>
         <input type="text" size="130" />
-        <button>Send message</button>
+        <button onclick="return false">Send message</button>
       </form>
+      <ul id="chatbox">
+      </ul>
     </div>
 
   <script>
+  var params = window.location.search.split('=')[1];
+  var username = params.match(/\w{1,16}/g)[0];
+  //var room = params.match(/\w{1,16}/g)[1];
+
   $(document).ready(function() {
-    $("form").on('click', 'button', function(e) {
-      // e.preventDefault();
-      var username = window.location.search.split('=')[1];
-      console.log("clicked the button!");
-      var msg = this.$("input").val();
-      
-      // sendMessage(username, msg);
+    $("button").on('click', function(e) {
+      var msg = $("input").val();
+      sendMessage(username, msg);
+    });
+    $("ul").on('click', 'li',function(event) {
+      $("li").removeClass('selected');
+      $(this).addClass('selected');
+      room = $(".selected").text();
+      console.log(room);
     });
 
   });
