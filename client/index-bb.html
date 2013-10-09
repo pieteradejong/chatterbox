@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <title>Replication Station</title>
+    <link rel="stylesheet" href="styles/styles-bb.css">
+
+    <!-- external javascript -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/backbone/backbone-min.js"></script>
+    <!-- internal javascript -->
+    <script src="scripts/config-bb.js"></script>
+    <script src="scripts/app-bb.js"></script>
+  </head>
+  <body>
+
+    <div id="new-status">
+      <h2>Chat Client</h2>
+      <form action>
+        <textarea></textarea>
+        <br>
+        <input type="submit" value="post" />
+      </form>
+    </div>
+
+    <div id="statuses">
+      <h2>Messages</h2>
+      <ul></ul>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+    $('#new-status form').submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: 'https://api.parse.com/1/classes/chatterbox',
+            type: 'POST',
+            dataType: 'json',
+            data: { text: $('#new-status').find('textarea').val() },
+            success: function(data) {
+                $('#statuses').append('<li>' + data.text + '</li>');
+                $('#new-status').find('textarea').val('');
+            },
+            error: function (data) {console.error('ack!');}
+          });
+       });
+    });
+
+
+    </script>
+  </body>
+</html>
