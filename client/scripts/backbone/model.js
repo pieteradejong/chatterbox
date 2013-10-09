@@ -6,7 +6,6 @@ $(function() {
       content: 'sample text',
       room: 'lobby'
     }
-
   });
 
   var MessagesList = Backbone.Collection.extend({

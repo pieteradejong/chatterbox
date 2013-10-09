@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>hello-backbonejs</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-  <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-  <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
+<script src="../../bower_components/jquery/jquery.min.js"></script>
+    <script src="../../bower_components/underscore/underscore-min.js"></script>
   <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js"></script>
-  <script src="pieter-model.js"></script>
-  <script src="pieter-view.js"></script>
-  <script src="pieter-controller.js"></script>
-
+   <!-- <script src="controller.js"></script>
+  // <script src="model.js"></script>
+  // <script src="view.js"></script> -->
+  <script src="app.js"></script>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
     <h2>Chat Client</h2>
     <form action>
       <textarea></textarea>
-      <input type="submit" value="post" />
+      <input type="submit" value="post" onclick="return false" />
     </form>
     <div id="messages">
 
